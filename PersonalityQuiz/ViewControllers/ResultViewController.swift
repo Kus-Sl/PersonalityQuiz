@@ -18,16 +18,14 @@ class ResultViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
 
-        let resultQuiz = getResultForQuiz(with: receivedAnswers)
-        resultAnimalLabel.text = "Вы - \(resultQuiz.rawValue)"
-        resultDefinitionLabel.text = resultQuiz.definition
+        getResultForQuiz(with: receivedAnswers)
     }
 
-    func getResultForQuiz(with answers: [Answer]) -> Animal {
+    private func getResultForQuiz(with answers: [Answer]) {
 
         var counterDictionary: [Animal: Int] = [:]
         var countAnswers = 0
-        var resultAnswer: Animal!
+        var resultAnimal: Animal!
 
         answers.forEach {
             counterDictionary[$0.animal, default: 0] += 1
@@ -36,12 +34,18 @@ class ResultViewController: UIViewController {
         for (animal, count) in counterDictionary {
             if count > countAnswers {
                 countAnswers = count
-                resultAnswer = animal
+                resultAnimal = animal
             } else if countAnswers == count {
-                let randomResultAnswer = [resultAnswer, animal]
-                resultAnswer = randomResultAnswer.randomElement() as? Animal
+                let randomResultAnswer = [resultAnimal, animal]
+                resultAnimal = randomResultAnswer.randomElement() as? Animal
             }
         }
-        return resultAnswer
+
+        showResultOfQuiz(resultAnimal)
+    }
+
+    private func showResultOfQuiz(_ result: Animal) {
+        resultAnimalLabel.text = "Вы - \(result.rawValue)"
+        resultDefinitionLabel.text = result.definition
     }
 }
