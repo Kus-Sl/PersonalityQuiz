@@ -8,14 +8,40 @@
 import UIKit
 
 class ResultViewController: UIViewController {
-    
-    // 1. Передать сюда массив с ответами
-    // 2. Определить наиболее часто встречающийся тип животного
-    // 3. Отобразить результат в соответствии с этим животным
-    // 4. Избавиться от кнопки возврата на предыдущий экран
+
+    @IBOutlet weak var resultAnimalLabel: UILabel!
+    @IBOutlet weak var resultDefinitionLabel: UILabel!
+
+    var receivedAnswers: [Answer]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.hidesBackButton = true
 
+        let resultQuiz = getResultForQuiz(with: receivedAnswers)
+        resultAnimalLabel.text = "Вы - \(resultQuiz.rawValue)"
+        resultDefinitionLabel.text = resultQuiz.definition
+    }
+
+    func getResultForQuiz(with answers: [Answer]) -> Animal {
+
+        var counterDictionary: [Animal: Int] = [:]
+        var countAnswers = 0
+        var resultAnswer: Animal!
+
+        answers.forEach {
+            counterDictionary[$0.animal, default: 0] += 1
+        }
+
+        for (animal, count) in counterDictionary {
+            if count > countAnswers {
+                countAnswers = count
+                resultAnswer = animal
+            } else if countAnswers == count {
+                let randomResultAnswer = [resultAnswer, animal]
+                resultAnswer = randomResultAnswer.randomElement() as? Animal
+            }
+        }
+        return resultAnswer
     }
 }
