@@ -24,22 +24,14 @@ class ResultViewController: UIViewController {
     private func getResultForQuiz(with answers: [Answer]) {
 
         var counterDictionary: [Animal: Int] = [:]
-        var countAnswers = 0
         var resultAnimal: Animal!
 
         answers.forEach {
             counterDictionary[$0.animal, default: 0] += 1
         }
 
-        for (animal, count) in counterDictionary {
-            if count > countAnswers {
-                countAnswers = count
-                resultAnimal = animal
-            } else if countAnswers == count {
-                let randomResultAnswer = [resultAnimal, animal]
-                resultAnimal = randomResultAnswer.randomElement() as? Animal
-            }
-        }
+        resultAnimal = counterDictionary.sorted { $0.value > $1.value }.first?.key
+        showResultOfQuiz(resultAnimal)
 
         showResultOfQuiz(resultAnimal)
     }
