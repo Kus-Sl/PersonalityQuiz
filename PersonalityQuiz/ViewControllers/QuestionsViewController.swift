@@ -81,16 +81,12 @@ extension QuestionsViewController {
             stackView?.isHidden = true
         }
 
-        // Get current question
         let currentQuestion = questions[questionIndex]
 
-        // Set current question for question label
         questionLabel.text = currentQuestion.title
 
-        // Calculate progress
         let totalProgress = Float(questionIndex) / Float(questions.count)
 
-        // Set progress for question progress view
         questionProgressView.setProgress(totalProgress, animated: true)
 
         // Set navigation title
